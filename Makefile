@@ -9,7 +9,7 @@ program2.mlir: program1.mlir irdl.mlir
 	mlir-opt --irdl-file=irdl.mlir program1.mlir -test-pdl-bytecode-pass --convert-arith-to-llvm --convert-func-to-llvm --llvm-legalize-for-export > program2.mlir
 
 program3.mlir: program2.mlir
-	cat program2.mlir | tail --lines=-11 | head --lines=-2 > program3.mlir
+	cat program2.mlir | tail --lines=+$(shell grep -n 'module @ir' program2.mlir | cut -d: -f1) | head --lines=-2 > program3.mlir
 
 program4.ll: program3.mlir
 	mlir-translate --mlir-to-llvmir program3.mlir > program4.ll
